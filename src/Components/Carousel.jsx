@@ -1,16 +1,28 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import foto1 from "../assets/foto1.jpg";
-import foto2 from "../assets/foto2.jpg";
-import foto3 from "../assets/foto3.jpg";
-import foto4 from "../assets/foto4.jpg";
-import foto5 from "../assets/foto5.jpg";
-import foto6 from "../assets/foto6.jpg";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
+import { useParams} from "react-router-dom";
+import axios from "axios";
 
 const Carousel = () => {
+  const [wisata, setWisata] = useState(null);
+  const { id } = useParams();
+
+  const getWisataById = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/wisata/${id}`);
+      setWisata(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getWisataById();
+  }, [id]);
+  
   const sliderRef = useRef(null);
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -31,7 +43,7 @@ const Carousel = () => {
         ></div>
       );
     },
-    beforeChange: (current, next) => setCurrentSlide(next),
+    beforeChange: (current, next) => setCurrentSlide (next),
   };
 
   const goToNextSlide = () => {
@@ -43,37 +55,35 @@ const Carousel = () => {
   };
 
   return (
-    <div className="max-w-screen-xl mx-auto mt-8 relative">
-      <Slider className="" ref={sliderRef} {...settings}>
+    <div className="max-w-screen-xl object-cover mx-auto mt-8 relative">
+      {wisata && (
+        <Slider className="" ref={sliderRef} {...settings}>
         <div>
-          <img src={foto1} alt="Foto 1" className="w-full h-auto rounded-xl" />
+          <img src={wisata.foto1} alt="Foto 1" className="w-full h-full object-cover rounded-xl" />
         </div>
         <div>
-          <img src={foto2} alt="Foto 2" className="w-full h-auto rounded-xl" />
+          <img src={wisata.foto2} alt="Foto 2" className="w-full h-full object-cover rounded-xl" />
         </div>
         <div>
-          <img src={foto3} alt="Foto 3" className="w-full h-auto rounded-xl" />
+          <img src={wisata.foto3} alt="Foto 3" className="w-full h-full object-cover rounded-xl" />
         </div>
         <div>
-          <img src={foto4} alt="Foto 4" className="w-full h-auto rounded-xl" />
+          <img src={wisata.foto4} alt="Foto 4" className="w-full h-full object-cover rounded-xl" />
         </div>
         <div>
-          <img src={foto5} alt="Foto 5" className="w-full h-auto rounded-xl" />
-        </div>
-        <div>
-          <img src={foto6} alt="Foto 6" className="w-full h-auto rounded-xl" />
+          <img src={wisata.foto5} alt="Foto 5" className="w-full h-full object-cover rounded-xl" />
         </div>
       </Slider>
-
+      )}
       <button
         onClick={goToPrevSlide}
-        className="absolute top-1/2 left-4 transform -translate-y-1/2 hover:text-white text-4xl hover:bg-[#3c87ca] rounded-full text-[#3c87ca] bg-white focus:outline-none"
+        className="absolute  top-1/2 -left-12 shadow-lg transform -translate-y-1/2 hover:text-white text-4xl hover:bg-[#3c87ca] rounded-full text-[#3c87ca] bg-white focus:outline-none"
       >
         <BiChevronLeft  />
       </button>
       <button
         onClick={goToNextSlide}
-        className="absolute top-1/2 right-4 transform -translate-y-1/2 hover:text-white text-4xl hover:bg-[#3c87ca] rounded-full text-[#3c87ca] bg-white focus:outline-none"
+        className="absolute top-1/2 -right-12  shadow-lg transform -translate-y-1/2 hover:text-white text-4xl hover:bg-[#3c87ca] rounded-full text-[#3c87ca] bg-white focus:outline-none"
       >
         <BiChevronRight />
       </button>

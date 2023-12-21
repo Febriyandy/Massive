@@ -1,19 +1,46 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import NavbarAdmin from '../../Components/NavbarAdmin';
 import { ImBin2 } from "react-icons/im";
 import { MdEdit } from "react-icons/md";
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const DataPenggunaWisata = () => {
-    const data = [
-        { id: 1, Nama: 'Muftahul Fikri Pratama', Username: 'Fikri', JenisKelamin: 'Laki Laki', Email: 'miftahul@gmail.com', NoHP: '081261011991' },
-        { id: 2, Nama: 'Febriandi', Username: 'Febriyandy', JenisKelamin: 'Laki Laki', Email: 'febri@gmail.com', NoHP: '085162598308' },
-        { id: 3, Nama: 'Nabiil', Username: 'NabiilRafiq', JenisKelamin: 'Laki Laki', Email: 'nabil@gmai.com', NoHP: '0812827559958' },
-        { id: 4, Nama: 'Selvi Debi Anita', Username: 'Selvi D', JenisKelamin: 'Perempuan', Email: 'selvi@gmail.com', NoHP: '082341935137' },
-        { id: 5, Nama: 'Zelviannisa', Username: 'Ica Zelvi', JenisKelamin: 'Perempuan', Email: 'zelviannisa@gmail.com', NoHP: '083161362944' },
-        { id: 6, Nama: 'Dimas', Username: 'Dimas', JenisKelamin: 'Laki Laki', Email: 'dimas@gmail.com', NoHP: '083809704076' },
-      ];
 
-      
+const [user, setUser] = useState([]);
+
+useEffect(()=>{
+  getUser();
+}, []);
+
+const getUser = async () => {
+  const response = await axios.get('http://localhost:5000/user');
+  setUser(response.data);
+}
+
+const deleteUser = async (idUser) => {
+  try {
+    const result = await Swal.fire({
+      title: 'Konfirmasi Hapus',
+      text: 'Apakah Anda yakin ingin menghapus data ini?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, Hapus!',
+      cancelButtonText: 'Batal',
+    });
+
+    if (result.isConfirmed) {
+      await axios.delete(`http://localhost:5000/user/${idUser}`);
+      getUser();
+      Swal.fire('Terhapus!', 'Data berhasil dihapus.', 'success');
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
   return (
     <>
     <NavbarAdmin/>
@@ -37,26 +64,22 @@ const DataPenggunaWisata = () => {
           <tr className="text-left">
             <th className="py-2 px-4  text-center">No</th>
             <th className="py-2 px-4 ">Nama</th>
-            <th className="py-2 px-4 ">Username</th>
-            <th className="py-2 px-4 ">Jenis Kelamin</th>
             <th className="py-2 px-4 ">Alamat Email</th>
             <th className="py-2 px-4 ">No HP</th>
             <th className="py-2 px-4 ">Aksi</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((row) => (
-            <tr key={row.id}>
-              <td className="py-2 px-4 border-y  text-center">{row.id}</td>
-              <td className="py-2 px-4 border-y">{row.Nama}</td>
-              <td className="py-2 px-4 border-y">{row.Username}</td>
-              <td className="py-2 px-4 border-y">{row.JenisKelamin}</td>
-              <td className="py-2 px-4 border-y">{row.Email}</td>
-              <td className="py-2 px-4 border-y">{row.NoHP}</td>
+          {user.map((user, index) => (
+            <tr key={user.id}>
+              <td className="py-2 px-4 border-y  text-center">{index + 1}</td>
+              <td className="py-2 px-4 border-y">{user.nama}</td>
+              <td className="py-2 px-4 border-y">{user.email}</td>
+              <td className="py-2 px-4 border-y">{user.no_hp}</td>
               <td className="py-2 px-4 border-y">
               <div className='flex'>
                 <button className="bg-blue-500 text-white px-2 py-2 rounded-full ml-2"><MdEdit /></button>
-                <button className="bg-red-500 text-white px-2 py-2 rounded-full ml-2"><ImBin2 /></button>
+                <button onClick={() => deleteUser(user.uuid)} className="bg-red-500 text-white px-2 py-2 rounded-full ml-2"><ImBin2 /></button>
                 </div>
               </td>
             </tr>

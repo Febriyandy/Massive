@@ -1,49 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import element1 from "../../assets/Layer1.svg";
 import element2 from "../../assets/Layer2.svg";
 import logo from "../../assets/Logo.png";
 import axios from "axios";
-import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 
-const axiosHandler = async (url, data) => await axios.post(url, data);
-
 const Daftar = () => {
-  const { register, handleSubmit, formState: { errors }, reset } = useForm();
-  const [isRegister, setRegister] = React.useState(false);
+  const navigate = useNavigate();
+  const [nama, setNama] = useState("");
+  const [email, setEmail] = useState("");
+  const [no_hp, setNo_hp] = useState("");
+  const [password, setPassword] = useState("");
 
-  const formHandle = () => {
-    setRegister((prev) => !prev);
-  };
-
-  const onSubmit = async (data) => {
-    const value = {
-      email: data.email,
-      nama: data.nama,
-      password: data.password,
-      no_hp: data.no_hp,
-    };
-
-    const statement = `http://localhost:7730/api/v1/${isRegister ? "Daftar" : "login"}`;
+  const Register = async (e) => {
+    e.preventDefault();
 
     try {
-      const response = await axiosHandler(statement, value);
+      const formData = new FormData();
+      formData.append("nama", nama);
+      formData.append("email", email);
+      formData.append("no_hp", no_hp);
+      formData.append("password", password);
+
+      await axios.post("http://localhost:5000/user", formData);
+      
       Swal.fire({
         icon: "success",
-        title: "Berhasil",
-        text: response.data,
+        title: "Pendaftaran Berhasil!",
+        showConfirmButton: false,
+        timer: 2000,
       });
-      reset(); // Reset form setelah berhasil
-      formHandle();
+
+      setTimeout(() => {
+        navigate("/Landingpage");
+        window.location.reload();
+      }, 2000);
     } catch (error) {
+      console.error("Error adding data:", error);
+
       Swal.fire({
         icon: "error",
-        title: "Oops...",
-        text: error.response.data,
+        title: "Gagal Mendaftar!",
+        text: "Terjadi kesalahan",
       });
     }
   };
-
+ 
   return (
     <div className="flex items-center justify-center relative bg-white">
       <img className="w-1/3 absolute top-0 right-0" src={element1} alt="" />
@@ -58,7 +61,7 @@ const Daftar = () => {
           <p className="text-black font-body text-center font-normal">
             Masukkan data di bawah untuk daftar DestinAsyik
           </p>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={Register} >
             <div className="mb-4">
               <label
                 htmlFor="nama"
@@ -68,29 +71,12 @@ const Daftar = () => {
               </label>
               <input
                 type="text"
-                id="nama"
-                name="nama"
+                value={nama}
+                onChange={(e) => setNama(e.target.value)}
                 placeholder="Masukkan Nama"
                 className="w-full p-3 border border-slate-300 rounded-2xl text-md shadow-md placeholder-slate-400
                 focus:outline-none focus:border-[#3c87ca] focus:ring-1 focus:ring-[#3c87ca]"
-                {...register("nama", { required: "Nama wajib diisi" })}
-              />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="no_hp"
-                className="block mt-5 mb-2 font-body font-normal text-black"
-              >
-                Nomor Handphone
-              </label>
-              <input
-                type="text"
-                id="no_hp"
-                name="no_hp"
-                placeholder="Masukkan Nomor"
-                className="w-full p-3 border border-slate-300 rounded-2xl text-md shadow-md placeholder-slate-400
-                focus:outline-none focus:border-[#3c87ca] focus:ring-1 focus:ring-[#3c87ca]"
-                {...register("no_hp", { required: "Nomor Handphone wajib diisi" })}
+                
               />
             </div>
             <div className="mb-4">
@@ -102,12 +88,29 @@ const Daftar = () => {
               </label>
               <input
                 type="email"
-                id="email"
-                name="email"
+                value={email}
+               onChange={(e) => setEmail(e.target.value)}
                 placeholder="Masukkan email"
                 className="w-full p-3 border border-slate-300 rounded-2xl text-md shadow-md placeholder-slate-400
                 focus:outline-none focus:border-[#3c87ca] focus:ring-1 focus:ring-[#3c87ca]"
-                {...register("email", { required: "Email wajib diisi" })}
+               
+              />
+            </div>
+            <div className="mb-4">
+              <label
+                htmlFor="no_hp"
+                className="block mt-5 mb-2 font-body font-normal text-black"
+              >
+                Nomor Handphone
+              </label>
+              <input
+                type="text"
+                value={no_hp}
+                onChange={(e) => setNo_hp(e.target.value)}
+                placeholder="Masukkan Nomor"
+                className="w-full p-3 border border-slate-300 rounded-2xl text-md shadow-md placeholder-slate-400
+                focus:outline-none focus:border-[#3c87ca] focus:ring-1 focus:ring-[#3c87ca]"
+               
               />
             </div>
             <div className="mb-4">
@@ -119,12 +122,12 @@ const Daftar = () => {
               </label>
               <input
                 type="password"
-                id="password"
-                name="password"
+                value={password}
+            onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
                 className="w-full p-3 border border-slate-300 rounded-2xl text-md shadow-md placeholder-slate-400
                 focus:outline-none focus:border-[#3c87ca] focus:ring-1 focus:ring-[#3c87ca]"
-                {...register("password", { required: "Password wajib diisi" })}
+               
               />
             </div>
             <button

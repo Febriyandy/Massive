@@ -1,8 +1,27 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Navbar from '../../Components/Navbar';
 import { Footer } from '../../Components/Footer';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
+
 
 const Pemesanan = () => {
+
+  const { id } = useParams();
+
+  const getPaketById = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/paket/${id}`);
+      setPaket(response.data); // Sesuaikan dengan respons dari server
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  useEffect(() => {
+    getPaketById();
+  }, [id]);
+
   return (
     <>
     <Navbar/>

@@ -1,16 +1,44 @@
-import React from 'react'
+import React, { useState, useEffect }  from 'react'
 import { ImBin2 } from "react-icons/im";
 import { MdEdit } from "react-icons/md";
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const DataNonWisata = () => {
-    const data = [
-        { id: 1, namaDestinasi: 'Tepi Sawah', alamat: 'Jl. Sidomukti, Tiyosan, Condongcatur, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta', deskripsiSingkat: 'Sesuai namanya, kafe ini tepat berada di tepi sawah. Dengan bangunan utama berbentuk joglo, kafe ini mengusung konsep tradisional Jawa..', jamBuka: '13.00-22.00 WIB' },
-        { id: 2, namaDestinasi: 'Oppio Coffee Milk', alamat: 'Jl. Nglengkong Besi No.11, Area Sawah, Sukoharjo, Kec. Ngaglik, Kabupaten Sleman, Daerah Istimewa Yogyakarta ', deskripsiSingkat: 'Cafe hits Jogja selanjutnya ada Oppio Coffee Milk. Memiliki konsep suasana alam, cafe ini memberikan kamu kesempatan untuk memanjakan mata dengan melihat hamparan sawah hijau di sekelilingnya', jamBuka: '14.00-22.00 WIB' },
-        { id: 3, namaDestinasi: 'Epik Coffee', alamat: 'Jl. Palagan Tentara Pelajar No.29, Mudal, Sariharjo, Kec. Ngaglik, Kabupaten Sleman, Daerah Istimewa Yogyakarta ', deskripsiSingkat: 'Ini perjalanan dari biji kopi sampai mencapai meja Anda, memberikan Anda dan menghibur pencerahan Indonesia Coffees.', jamBuka: '10.00-23.00 WIB' },
-        { id: 4, namaDestinasi: 'Carney Co', alamat: 'Jl. Garuni II, Kledokan, Caturtunggal, Kec. Depok, Kabupaten Sleman, Daerah Istimewa Yogyakarta', deskripsiSingkat: ' Coffee shop yang tengah naik daun di kalangan kaum muda Jogja! Jelajahi dunianya melalui media sosial, di mana foto-foto dan video memukau memancing rasa penasaran Anda terhadap keunikan cafe ini.', jamBuka: '10.00-00.00 WIB' },
-        { id: 5, namaDestinasi: 'Silol Kopi & Eatery', alamat: 'Jl. Suroto, Kotabaru, Kec. Gondokusuman, Kota Yogyakarta, Daerah Istimewa Yogyakarta ', deskripsiSingkat: 'Silol Kopi & Eatery merupakan coffee shop yang memiliki suasana yang modern, yang merupakan tempat untuk menikmati berbagai jenis kopi', jamBuka: '00.01-00.00 WIB' },
-      ];
+    const [nonwisata, setNonwisata] = useState([]);
 
+    useEffect(()=>{
+      getNonwisata();
+    }, []);
+
+    const getNonwisata = async () => {
+      const response = await axios.get('http://localhost:5000/nonwisata');
+      setNonwisata(response.data);
+    }
+
+    const deleteNonwisata = async (nonwisataId) => {
+      try {
+        const result = await Swal.fire({
+          title: 'Konfirmasi Hapus',
+          text: 'Apakah Anda yakin ingin menghapus data ini?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Ya, Hapus!',
+          cancelButtonText: 'Batal',
+        });
+  
+        if (result.isConfirmed) {
+          await axios.delete(`http://localhost:5000/nonwisata/${nonwisataId}`);
+          getNonwisata();
+          Swal.fire('Terhapus!', 'Data berhasil dihapus.', 'success');
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
   return (
     <>
 
@@ -38,18 +66,18 @@ const DataNonWisata = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((row) => (
-            <tr key={row.id}>
-              <td className="py-2 px-4 border-y text-center">{row.id}</td>
-              <td className="py-2 px-4 border-y">{row.namaDestinasi}</td>
-              <td className="py-2 px-4 border-y">{row.alamat}</td>
-              <td className="py-2 px-4 border-y">{row.deskripsiSingkat}</td>
-              <td className="py-2 px-4 border-y">{row.jamBuka}</td>
+          {nonwisata.map((nonwisata, index) => (
+            <tr key={nonwisata.id}>
+              <td className="py-2 px-4 border-y text-center">{index + 1}</td>
+              <td className="py-2 px-4 border-y">{nonwisata.nama_tempat}</td>
+              <td className="py-2 px-4 border-y">{nonwisata.alamat}</td>
+              <td className="py-2 px-4 border-y">{nonwisata.deskripsi_singkat}</td>
+              <td className="py-2 px-4 border-y">{nonwisata.jam_buka}</td>
               <td className="py-2 px-4 border-y">
 
               <div className='flex'>
                 <button className="bg-blue-500 text-white px-2 py-2 rounded-full ml-2"><MdEdit /></button>
-                <button className="bg-red-500 text-white px-2 py-2 rounded-full ml-2"><ImBin2 /></button>
+                <button onClick={() => deleteNonwisata(wisata.id)} className="bg-red-500 text-white px-2 py-2 rounded-full ml-2"><ImBin2 /></button>
                 </div>
               </td>
             </tr>

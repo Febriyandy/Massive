@@ -1,16 +1,43 @@
-import React from 'react'
-import { ImBin2 } from "react-icons/im";
-import { MdEdit } from "react-icons/md";
-
+import React, { useState, useEffect } from 'react';
+import { ImBin2 } from 'react-icons/im';
+import { MdEdit } from 'react-icons/md';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const DataWisata = () => {
-    const data = [
-        { id: 1, namaDestinasi: 'Malioboro', alamat: 'Jl. Malioboro, Sosromenduran, Gedong Tengen, Kota Yogyakarta', deskripsiSingkat: 'Jalan ikonik di Yogyakarta, pusat perbelanjaan dan hiburan malam dengan suasana khas, pedagang kaki lima, dan lampu neon yang menarik.' },
-        { id: 2, namaDestinasi: 'Candi Prambanan', alamat: 'Jl. Raya Solo - Yogyakarta No.16, Kranggan, Bokoharjo, Kec. Prambanan, Kabupaten Sleman, Daerah Istimewa Yogyakarta', deskripsiSingkat: 'Keindahan Hindu abad ke-9 di Yogyakarta. Siluet megah dan relief ukiran menciptakan potret budaya Indonesia yang memukau.' },
-        { id: 3, namaDestinasi: 'Keraton Yogyakarta', alamat: 'Jl. Rotowijayan Blok No. 1, Panembahan, Kecamatan Kraton, Kota Yogyakarta, Daerah Istimewa Yogyakarta', deskripsiSingkat: 'Keelokan arsitektur Jawa, kehijauan taman, dan pesona sejarah yang terpancar. Suasana hangat dan detail artistik yang memikat perhatian.' },
-        { id: 4, namaDestinasi: 'Taman Sari', alamat: 'Patehan, Kecamatan Kraton, Kota Yogyakarta, Daerah Istimewa Yogyakarta 55133', deskripsiSingkat: 'Istana air yang memesona dengan arsitektur istimewa dan keindahan taman yang menakjubkan. Suasana magis dan penuh sejarah.' },
-        { id: 5, namaDestinasi: 'Parangtritis', alamat: 'Jl. Pantai Parangkusumo, Pantai, Parangtritis, Kretek, Bantul, Daerah Istimewa Yogyakarta', deskripsiSingkat: 'Keindahan pasir putih, ombak menarik, dan nuansa mistis. Aktivitas seru dan budaya bersatu dalam destinasi singkat.' },
-      ];
+  const [wisata, setWisata] = useState([]);
+
+  useEffect(() => {
+    getWisata();
+  }, []);
+
+  const getWisata = async () => {
+    const response = await axios.get('http://localhost:5000/wisata');
+    setWisata(response.data);
+  };
+
+  const deleteWisata = async (wisataId) => {
+    try {
+      const result = await Swal.fire({
+        title: 'Konfirmasi Hapus',
+        text: 'Apakah Anda yakin ingin menghapus data ini?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Ya, Hapus!',
+        cancelButtonText: 'Batal',
+      });
+
+      if (result.isConfirmed) {
+        await axios.delete(`http://localhost:5000/wisata/${wisataId}`);
+        getWisata();
+        Swal.fire('Terhapus!', 'Data berhasil dihapus.', 'success');
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -38,20 +65,21 @@ const DataWisata = () => {
           </tr>
         </thead>
         <tbody>
-          {data.map((row) => (
-            <tr key={row.id}>
-              <td className="py-2 px-4 border-y text-center">{row.id}</td>
-              <td className="py-2 px-4 border-y">{row.namaDestinasi}</td>
-              <td className="py-2 px-4 border-y">{row.alamat}</td>
-              <td className="py-2 px-4 border-y">{row.deskripsiSingkat}</td>
-              <td className="py-2 px-4 border-y">
-                <div className='flex'>
-                <button className="bg-blue-500 text-white px-2 py-2 rounded-full ml-2"><MdEdit /></button>
-                <button className="bg-red-500 text-white px-2 py-2 rounded-full ml-2"><ImBin2 /></button>
-                </div>
-              </td>
-            </tr>
+          {wisata.map((wisata, index ) => (
+               <tr key={wisata.id}>
+               <td className="py-2 px-4 border-y text-center">{index + 1}</td>
+               <td className="py-2 px-4 border-y">{wisata.nama_tempat}</td>
+               <td className="py-2 px-4 border-y">{wisata.alamat}</td>
+               <td className="py-2 px-4 border-y">{wisata.deskripsi_singkat}</td>
+               <td className="py-2 px-4 border-y">
+                 <div className='flex'>
+                 <button className="bg-blue-500 text-white px-2 py-2 rounded-full ml-2"><MdEdit /></button>
+                 <button onClick={() => deleteWisata(wisata.id)} className="bg-red-500 text-white px-2 py-2 rounded-full ml-2"><ImBin2 /></button>
+                 </div>
+               </td>
+             </tr>
           ))}
+           
         </tbody>
       </table>
     </div>

@@ -17,7 +17,7 @@ const Admin = () => {
                     <h1 className='text-white text-4xl'><IoLocation/></h1>
                 </div>
                 <div>
-                    <h1 className='text-3xl pl-3 font-body font-bold'>24</h1>
+                    <h1 className='text-3xl pl-3 font-body font-bold'>17</h1>
                     <p className='text-base font-body font-bold pl-3 '>Destinasi Wisata</p>
                 </div>
             </div>
@@ -28,7 +28,7 @@ const Admin = () => {
                     <h1 className='text-white text-4xl'><IoLocation/></h1>
                 </div>
                 <div>
-                    <h1 className='text-3xl pl-3 font-body font-bold'>21</h1>
+                    <h1 className='text-3xl pl-3 font-body font-bold'>14</h1>
                     <p className='text-sm font-body font-bold pl-3 '>Destinasi Non Wisata</p>
                 </div>
             </div>
@@ -39,7 +39,7 @@ const Admin = () => {
                     <h1 className='text-white text-4xl'><FaUser/></h1>
                 </div>
                 <div>
-                    <h1 className='text-3xl pl-3 font-body font-bold'>18</h1>
+                    <h1 className='text-3xl pl-3 font-body font-bold'>8</h1>
                     <p className='text-base font-body font-bold pl-3 '>Total Pengguna</p>
                 </div>
             </div>

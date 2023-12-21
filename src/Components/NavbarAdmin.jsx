@@ -20,7 +20,7 @@ const NavbarAdmin = () => {
     { path: '/DataPaketWisata', icon: <MdOutlineTour />, label: 'Paket Wisata' },
     { path: '/DataPenggunaWisata', icon: <FaUser />, label: 'Pengguna' },
     { path: '/DataTransaksi', icon: <FaHistory />, label: 'Transaksi' },
-    { path: '/Kontak', icon: <MdOutlineMailOutline />, label: 'Pesan Kontak' },
+    { path: '/DataKontak', icon: <MdOutlineMailOutline />, label: 'Pesan Kontak' },
     { path: '/', icon: <BiLogOut />, label: 'Keluar' },
   ];
 

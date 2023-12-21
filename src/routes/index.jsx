@@ -8,10 +8,10 @@ import Login from '../pages/auth/login';
 import Daftar from '../pages/auth/daftar';
 import Notfound from '../pages/home/Notfound';
 import { Footer } from '../Components/Footer';
-import DetailWisata1 from '../pages/home/DetailWisata1';
+import DetailWisata from '../pages/home/DetailWisata';
 import DetailWisata2 from '../Components/DetailWisata2';
 import DetailWisata3 from '../Components/DetailWisata3';
-import DetailWisata4 from '../Components/DetailWisata4';
+import DetailNonwisata from '../pages/home/DetailNonwisata';
 import DetailWisata5 from '../Components/DetailWisata5';
 import DetailWisata6 from '../Components/DetailWisata6';
 import Carousel from '../Components/Carousel';
@@ -39,63 +39,58 @@ import TambahDataNonWisata from '../pages/home/TambahDataNonWisata';
 import TambahDataWisata from '../pages/home/TambahDataWisata';
 import TambahDataPaketWisata from '../pages/home/TambahDataPaketWisata';
 import DetailTransaksiAdmin from '../pages/home/DetailTransaksiAdmin';
+import Wisata from '../pages/home/Wisata';
+import DataKontak from '../pages/home/DataKontak';
 
-import PublicRoutes from './PublicRoutes';
-import AuthRoutes from './AuthRoutes';
 
 const Routing = () =>{
-    const token = localStorage.getItem("Authorization");
-    const isLoggin = token === null ? false :true;
-
     return(
         <Routes>
         <Route path='/'>
-          <Route element={<PublicRoutes isLoggin={isLoggin} />}>
-              <Route path="/Login" element={<Login />} />
+              <Route path="/login" element={<Login />} />
               <Route path="/Daftar" element={<Daftar />} />
-          </Route>
-          <Route path='/' element={<AuthRoutes isLoggin={isLoggin} />}>
+              <Route path="/" element={<Home />} />
               <Route path='/landingpage' element={<Landingpage/>} />
-          </Route>
-
-          <Route path="/Home" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/kontak" element={<Kontak />} />
-          <Route path='/footer' element={<Footer />} />
-          <Route path='/DetailWisata1' element={<DetailWisata1/>} />
-          <Route path='/DetailWisata2' element={<DetailWisata2/>} />
-          <Route path='/DetailWisata3' element={<DetailWisata3/>} />
-          <Route path='/DetailWisata4' element={<DetailWisata4/>} />
-          <Route path='/DetailWisata5' element={<DetailWisata5/>} />
-          <Route path='/DetailWisata6' element={<DetailWisata6/>} />
-          <Route path="*" element={<Notfound />} />
-          <Route path='/carousel' element={<Carousel/>} />
-          <Route path='/Nonwisata' element={<NonWisata />} />
-          <Route path='/Navbar2' element={<Navbar2 />} />
-          <Route path='/Navbar1' element={<Navbar1 />} />
-          <Route path='/Profil' element={<Profil/>} />
-          <Route path='/Like' element={<Like/>}/>
-          <Route path='/PaketWisata' element={<PaketWisata/>}/>
-          <Route path='/DetailPaket' element={<DetailPaket/>}/>
-          <Route path='/Pemesanan' element={<Pemesanan/>} />
-          <Route path='/Pembayaran' element={<Pembayaran/>}/>
-          <Route path='/Konfirmasi' element={<Konfirmasi/>}/>
-          <Route path='/Transaksi' element={<Transaksi/>} />
-          <Route path='/DetailTransaksi' element={<DetailTransaksi/>} />
-          <Route path='/Navbaradmin' element={<NavbarAdmin/>}/>
-          <Route path='/DataNonWisata' element={<DataNonWisata/>}/>
-          <Route path='/DataWisata' element={<DataWisata/>}/>
-          <Route path='/DataPaketWisata' element={<DataPaketWisata/>}/>
-          <Route path='/DataPenggunaWisata' element={<DataPenggunaWisata/>}/>
-          <Route path='/DataTransaksi' element={<DataTransaksi/>}/>
-          <Route path='/Admin' element={<Admin/>}/>
-          <Route path='/Destinasi' element={<Destinasi/>} />
-          <Route path='/TambahDataNonWisata' element={<TambahDataNonWisata/>}/>
-          <Route path='/TambahDataWisata' element={<TambahDataWisata/>}/>
-          <Route path='/TambahDataPaketWisata' element={<TambahDataPaketWisata/>}/>
-          <Route path='/DetailTransaksiAdmin' element={<DetailTransaksiAdmin/>}/>
-
-        </Route>
+              <Route path="/about" element={<About />} />
+              <Route path="/kontak" element={<Kontak />} />
+              <Route path='/footer' element={<Footer />} />
+              <Route path='/Wisata/DetailWisata/:id' element={<DetailWisata/>} />
+              <Route path='/Landingpage/DetailWisata/:id' element={<DetailWisata/>} />
+              <Route path='/DetailWisata2' element={<DetailWisata2/>} />
+              <Route path='/DetailWisata3' element={<DetailWisata3/>} />
+              <Route path='/Nonwisata/DetailNonwisata/:id' element={<DetailNonwisata/>} />
+              <Route path='/Landingpage/DetailNonwisata/:id' element={<DetailNonwisata/>} />
+              <Route path='/DetailWisata5' element={<DetailWisata5/>} />
+              <Route path='/DetailWisata6' element={<DetailWisata6/>} />
+              <Route path="*" element={<Notfound />} />
+              <Route path='/carousel' element={<Carousel/>} />
+              <Route path='/Nonwisata' element={<NonWisata />} />
+              <Route path='/Navbar2' element={<Navbar2 />} />
+              <Route path='/Navbar1' element={<Navbar1 />} />
+              <Route path='/Profil' element={<Profil/>} />
+              <Route path='/Like' element={<Like/>}/>
+              <Route path='/PaketWisata' element={<PaketWisata/>}/>
+              <Route path='/PaketWisata/DetailPaket/:id' element={<DetailPaket/>}/>
+              <Route path='/PaketWisata/DetailPaket/:id/Pemesanan/:id' element={<Pemesanan/>} />
+              <Route path='/Pembayaran' element={<Pembayaran/>}/>
+              <Route path='/Konfirmasi' element={<Konfirmasi/>}/>
+              <Route path='/Transaksi' element={<Transaksi/>} />
+              <Route path='/DetailTransaksi' element={<DetailTransaksi/>} />
+              <Route path='/Navbaradmin' element={<NavbarAdmin/>}/>
+              <Route path='/DataNonWisata' element={<DataNonWisata/>}/>
+              <Route path='/DataWisata' element={<DataWisata/>}/>
+              <Route path='/DataPaketWisata' element={<DataPaketWisata/>}/>
+              <Route path='/DataPenggunaWisata' element={<DataPenggunaWisata/>}/>
+              <Route path='/DataTransaksi' element={<DataTransaksi/>}/>
+              <Route path='/Admin' element={<Admin/>}/>
+              <Route path='/Destinasi' element={<Destinasi/>} />
+              <Route path='/TambahDataNonWisata' element={<TambahDataNonWisata/>}/>
+              <Route path='/TambahDataWisata' element={<TambahDataWisata/>}/>
+              <Route path='/TambahDataPaketWisata' element={<TambahDataPaketWisata/>}/>
+              <Route path='/DetailTransaksiAdmin' element={<DetailTransaksiAdmin/>}/>
+              <Route path='/Wisata' element={<Wisata/>}/>
+              <Route path='/DataKontak' element={<DataKontak/>}/>
+          </Route>   
       </Routes>
     );
 

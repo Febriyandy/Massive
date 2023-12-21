@@ -1,9 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+import axios from "axios";
 import element1 from "../../assets/Layer1.svg";
 import element2 from "../../assets/Layer2.svg";
 import logo from "../../assets/Logo.png";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const Auth = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post("http://localhost:5000/login", {
+        email,
+        password,
+      });
+
+      if (response.data.role === "user") {
+        navigate("/Landingpage");
+      } else if (response.data.role === "admin") {
+        navigate("/Admin");
+      } else {
+        Swal.fire({
+          icon: "success",
+          title: "Login Berhasil!",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+
+        setTimeout(() => {
+          Swal.close();
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Login Gagal",
+        text: "Terjadi kesalahan",
+      });
+    }
+  };
   return (
     <div className="flex items-center justify-center h-screen bg-white">
       <img className="w-1/3 absolute top-0 right-0" src={element1} alt="" />
@@ -19,7 +61,7 @@ const Login = () => {
             <br />
             Masukkan email dan password untuk autentikasi
           </p>
-          <form>
+          <form onSubmit={Auth}>
             <div className="mb-4">
               <label
                 htmlFor="email"
@@ -29,7 +71,8 @@ const Login = () => {
               </label>
               <input
                 type="text"
-                id="username"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 placeholder="Masukkan email"
                 className="w-full p-3  border border-slate-300 rounded-2xl text-md shadow-md placeholder-slate-400
                 focus:outline-none focus:border-[#3c87ca] focus:ring-1 focus:ring-[#3c87ca]"
@@ -44,7 +87,8 @@ const Login = () => {
               </label>
               <input
                 type="password"
-                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
                 className="w-full p-3  border border-slate-300 rounded-2xl text-md shadow-md placeholder-slate-400
                 focus:outline-none focus:border-[#3c87ca] focus:ring-1 focus:ring-[#3c87ca]"
@@ -56,14 +100,12 @@ const Login = () => {
             >
               Lupa Password?
             </a>
-            <a href="/Landingpage">
             <button
-              type="button"
+              type="submit"
               className="w-full p-3 font-body my-3 bg-[#3c87ca] text-white font-semibold rounded-full hover:bg-sky-800"
             >
-             Masuk
+              Masuk
             </button>
-            </a>
             <p className="font-body text-black text-center pt-3">
               Belum punya akun?
               <a href="/Daftar" className="text-[#3c87ca]">
